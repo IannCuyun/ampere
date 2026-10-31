@@ -59,7 +59,7 @@ class NavigationFlowContractTests(unittest.TestCase):
         for never in ("ambient", "results", "search", "album", "artist"):
             self.assertNotIn('"' + never + '"', modes)
         self.assertIn('"home"', modes)
-        self.assertIn('"features"', modes)
+        self.assertNotIn('"features"', modes)
         self.assertIn("mode = windowPrefs.lastMode", main)
 
     def test_explicit_home_and_contextual_library_own_content_navigation(self):
@@ -67,11 +67,9 @@ class NavigationFlowContractTests(unittest.TestCase):
         primary = rail.split("readonly property var links:", 1)[1].split(
             "readonly property var utilities:", 1)[0]
         self.assertIn('{ mode: "library", label: "Library" }', primary)
-        self.assertIn('{ mode: "features", label: "Features" }', primary)
+        self.assertNotIn('{ mode: "features", label: "Features" }', primary)
         self.assertNotIn('{ mode: "home", label: "Home" }', primary)
         self.assertNotIn('{ mode: "now", label: "Now playing" }', primary)
-        self.assertLess(primary.index('mode: "library"'),
-                        primary.index('mode: "features"'))
         self.assertNotIn("Up next", primary)
         self.assertIn('objectName: "homeButton"', rail)
         self.assertIn('Accessible.name: "Home"', rail)
@@ -124,7 +122,7 @@ class NavigationFlowContractTests(unittest.TestCase):
         self.assertIn("onOpenRewind: root.mode = \"rewind\"", main)
         self.assertIn("onOpenAmpy: root.mode = \"ampy\"", main)
         self.assertIn("FeaturesView {", main)
-        self.assertIn('{ mode: "features", label: "Features" }', rail)
+        self.assertNotIn('{ mode: "features", label: "Features" }', rail)
         self.assertIn('current: root.routeRoomActive && root.mode === "features"', main)
         self.assertIn("onOpenFeature: feature => root.openAtlasFeature(feature)", main)
         self.assertIn('current: root.routeRoomActive && root.mode === "ampy"', main)
@@ -437,7 +435,7 @@ class AlbumViewCompositionTests(unittest.TestCase):
 
     def test_actions_are_lines_not_slabs(self):
         album = self.album()
-        self.assertEqual(3, album.count("WashLine {"))
+        self.assertEqual(4, album.count("WashLine {"))
         line = (QML / "WashLine.qml").read_text(encoding="utf-8")
         self.assertIn("implicitHeight: 44", line)          # real target
         self.assertIn("Accessible.role: Accessible.Button", line)

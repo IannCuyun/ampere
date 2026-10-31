@@ -74,3 +74,9 @@ listening session exists. The QML gate uses the same PySide6/Qt runtime as the i
 Semantic versioning from 1.0 onward, tagged in git, with human-written history
 in [CHANGELOG.md](CHANGELOG.md). Feature ledger and design laws live in
 [NOTES.md](NOTES.md).
+
+### Core player release
+
+Version 1.0.0 focuses on Home, Library and playback. The unfinished Features
+tab is omitted while its tools are reviewed individually. Ampy is pending
+rebranding and rework. Existing feature source is retained for development.

@@ -131,9 +131,8 @@ TestCase {
         var libraryDest = findChild(rail, "dest-library")
         var featuresDest = findChild(rail, "dest-features")
         verify(libraryDest !== null)
-        verify(featuresDest !== null)
+        verify(featuresDest === null)
         verify(libraryDest.width >= 44 && libraryDest.height >= 44)
-        verify(featuresDest.width >= 44 && featuresDest.height >= 44)
         verify(findChild(rail, "dest-home") === null)
         verify(findChild(rail, "dest-now") === null)
 
@@ -141,8 +140,6 @@ TestCase {
         var libraryOrigin = row.mapToItem(rail, 0, 0)
         var historyOrigin = controls.mapToItem(rail, 0, 0)
         verify(libraryOrigin.x >= homeOrigin.x + home.width)
-        var featuresOrigin = featuresDest.mapToItem(rail, 0, 0)
-        verify(featuresOrigin.x >= libraryOrigin.x + libraryDest.width)
         verify(historyOrigin.x >= libraryOrigin.x + row.width)
 
         rail.currentMode = "browse"
@@ -155,13 +152,7 @@ TestCase {
         keyClick(Qt.Key_Return)
         compare(navigatedMode, "library")
 
-        rail.currentMode = "features"
-        wait(0)
-        verify(featuresDest.current)
-        featuresDest.forceActiveFocus()
-        tryCompare(featuresDest, "activeFocus", true)
-        keyClick(Qt.Key_Space)
-        compare(navigatedMode, "features")
+
     }
 
     function test_tallDesktopHeaderKeepsOneRaisedTopBand() {

@@ -43,8 +43,7 @@ FocusScope {
         return m
     }
     readonly property var links: [
-        { mode: "library", label: "Library" },
-        { mode: "features", label: "Features" }
+        { mode: "library", label: "Library" }
     ]
     readonly property real headerLeft: Math.max(34, width * 0.045)
     // One fixed top band keeps the complete header optically aligned and

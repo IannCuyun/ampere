@@ -16,8 +16,7 @@ Rectangle {
     property var primaryRows: [
         {mode: "home", label: "Home", icon: "sparkle"},
         {mode: "library", label: "Library", icon: "grid"},
-        {mode: "now", label: "Now playing", icon: "wave"},
-        {mode: "features", label: "Features", icon: "sparkle"}
+        {mode: "now", label: "Now playing", icon: "wave"}
     ]
 
     function pick(mode) {

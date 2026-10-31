@@ -30,7 +30,7 @@ Item {
     property var info: null
     signal destinationRequested(string section)
     signal artistRequested(string name)
-
+    signal radioRequested()
     function reload() {
         if (albumPath) info = backend.albumInfo(albumPath, albumName)
     }
@@ -112,53 +112,15 @@ Item {
             width: parent.width - x
             spacing: 0
 
-            Row {
-                spacing: 0
-                Text {
-                    text: "LIBRARY / "
-                    color: Theme.washFaint
-                    font.family: Theme.displayFont
-                    font.pixelSize: Theme.fsMicro
-                    font.letterSpacing: 2.4
-                }
-                // The route to the artist was reachable by pointer only
-                // (ROADMAP 5.2, 2026-08-22). It is a real navigation link and
-                // now announces, focuses and activates like one.
-                Text {
-                    id: crumbArtist
-                    visible: view.albumArtist !== ""
-                    text: view.albumArtist.toUpperCase()
-                    color: crumbHover.hovered || crumbArtist.activeFocus
-                           ? Theme.washInk : Theme.washMuted
-                    font.family: Theme.displayFont
-                    font.pixelSize: Theme.fsMicro
-                    font.letterSpacing: 2.4
-                    activeFocusOnTab: visible
-                    Accessible.role: Accessible.Link
-                    Accessible.name: "Open " + view.albumArtist
-                    Accessible.onPressAction: view.artistRequested(view.albumArtist)
-                    Keys.onReturnPressed: view.artistRequested(view.albumArtist)
-                    Keys.onEnterPressed: view.artistRequested(view.albumArtist)
-                    Keys.onSpacePressed: view.artistRequested(view.albumArtist)
-                    HoverHandler { id: crumbHover; cursorShape: Qt.PointingHandCursor }
-                    TapHandler { onTapped: view.artistRequested(view.albumArtist) }
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.bottom
-                        anchors.topMargin: 2
-                        height: 1
-                        visible: crumbArtist.activeFocus
-                        color: Theme.focusRing
-                    }
-                }
-                Text {
-                    text: (view.albumArtist ? " / " : "") + "ALBUM"
-                    color: Theme.washFaint
-                    font.family: Theme.displayFont
-                    font.pixelSize: Theme.fsMicro
-                    font.letterSpacing: 2.4
-                }
+            Text {
+                objectName: "albumBreadcrumb"
+                width: parent.width
+                text: "LIBRARY / " + (view.albumArtist ? view.albumArtist.toUpperCase() + " / " : "") + "ALBUM"
+                color: Theme.washMuted
+                font.family: Theme.displayFont
+                font.pixelSize: Theme.fsMicro
+                font.letterSpacing: 2.4
+                elide: Text.ElideRight
             }
 
             Text {
@@ -196,7 +158,9 @@ Item {
             }
 
             // Line actions, not slabs (SPEC row 20: never a pill, slab or glow)
-            Row {
+            Flow {
+                objectName: "albumActions"
+                width: parent.width
                 topPadding: 22
                 spacing: 28
                 WashLine {
@@ -214,6 +178,20 @@ Item {
                 WashLine {
                     label: "Queue"
                     onActivated: backend.queueAlbum(view.files)
+                }
+                WashLine {
+                    objectName: "albumRadioControl"
+                    label: "Radio"
+                    enabled: !!backend.currentSong.file
+                    opacity: enabled ? 1 : 0.35
+                    Accessible.name: "Start Song Radio from the playing song"
+                    onActivated: if (enabled) {
+                        backend.startBeaconRadio()
+                        view.radioRequested()
+                    }
+                    HoverHandler { id: radioHover }
+                    ToolTip.visible: radioHover.hovered
+                    ToolTip.text: enabled ? "Start Radio from the playing song" : "Play a song to start Radio"
                 }
             }
         }

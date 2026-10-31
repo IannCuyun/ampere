@@ -30,7 +30,7 @@ ApplicationWindow {
     }
     // DJ is not restorable because it is not routable: SPEC UNDESIGNED #10
     // parks it until Iann defines the mixer workflow (ROADMAP 3.2).
-    readonly property var _restorableModes: ["home", "browse", "features", "now", "radio",
+    readonly property var _restorableModes: ["home", "browse", "now", "radio",
         "rewind", "settings", "eq", "doctor", "disliked", "ampy"]
     function _rememberWindow() {
         if (mini || visibility !== Window.Windowed) return
@@ -735,6 +735,7 @@ ApplicationWindow {
                     albumName: root.albumName
                     onDestinationRequested: section => root.openLibrarySection(section)
                     onArtistRequested: name => root.openArtist(name, "")
+                    onRadioRequested: root.mode = "radio"
                 }
             }
             PageSlot {
@@ -1039,7 +1040,7 @@ ApplicationWindow {
             }
             else if (m === "rewind")  { root.mode = "rewind"; if (arg) rewindPage.pickTab(arg) }
             else if (m === "ampy") root.mode = "ampy"
-            else if (m === "features") root.mode = "features"
+            else if (m === "features") root.mode = "home"
             else if (m === "radio") {
                 if (arg) backend.openBeaconRadio(arg)
                 root.mode = "radio"

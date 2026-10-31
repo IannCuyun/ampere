@@ -150,13 +150,11 @@ class PointerOnlyRoutesTests(unittest.TestCase):
     """A route a pointer can take, a keyboard must be able to take
     (ROADMAP 5.2, 2026-08-22)."""
 
-    def test_the_album_page_artist_breadcrumb_is_a_real_link(self):
+    def test_album_location_labels_are_static(self):
         album = source("AlbumView.qml")
-        crumb = album.split("id: crumbArtist", 1)[1].split("}\n            }", 1)[0]
-        for token in ("activeFocusOnTab", "Accessible.onPressAction",
-                      "Keys.onReturnPressed", "Keys.onSpacePressed",
-                      "crumbArtist.activeFocus"):
-            self.assertIn(token, crumb, token)
+        crumb = album.split('objectName: "albumBreadcrumb"', 1)[1].split("}", 1)[0]
+        for token in ("MouseArea", "TapHandler", "activeFocusOnTab", "onPressAction"):
+            self.assertNotIn(token, crumb)
 
     def test_the_folder_page_artist_breadcrumb_is_a_real_link(self):
         frame = source("LibraryFrame.qml")
