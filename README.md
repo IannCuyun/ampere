@@ -62,11 +62,10 @@ Run the complete Python gate through Ampere's MPD-isolated discovery runner:
 The runner redirects environment-aware clients to temporary empty state and
 fails closed if any test attempts to connect to the listener's live MPD socket
 or loopback port. Do not use raw `unittest discover` as a release gate while a
-listening session exists. The Qt 6 QML gate remains:
+listening session exists. The QML gate uses the same PySide6/Qt runtime as the installed application:
 
 ```bash
-QML2_IMPORT_PATH=$PWD/qml /usr/lib/qt6/bin/qmltestrunner \
-  -input tests/qml -import qml -platform offscreen
+./.venv/bin/python tests/run_qml.py
 ```
 
 ## Versioning

@@ -3,11 +3,19 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
-import os
 from ampere.setup import setup_plan, apply_plan, configured_music_root
 
 
 class SetupTests(unittest.TestCase):
+    def test_existing_audio_identity_is_preserved(self):
+        with TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            old = home / '.config/pipewire/filter-chain.conf.d/esper-eq.conf'
+            old.parent.mkdir(parents=True)
+            old.write_text('existing chain')
+            files, _ = setup_plan(home, home, '/app', home, desktop=False)
+            self.assertIn(b'sink "esper_eq"', files[home / '.config/mpd/mpd.conf'])
+
     def test_conflict_created_during_publication_is_preserved(self):
         with TemporaryDirectory() as tmp:
             home = Path(tmp)

@@ -7,8 +7,8 @@ is supported with `pip install -e .`.
 
 Run Python checks through `python tests/run_isolated.py`. This runner prevents
 tests from connecting to your active MPD session. Do not use unrestricted test
-discovery while listening to music. Run the QML suite with Qt 6 qmltestrunner,
-`-input tests/qml -import qml`, using offscreen/software rendering when headless.
+discovery while listening to music. Run the QML suite with `python tests/run_qml.py`; it uses the installed
+PySide6 runtime, offscreen rendering and temporary settings.
 
 Keep changes focused and describe the behavior they fix. Preserve existing
 queues, listening history, playlists and configuration. Add a behavioral

@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tempfile
 
-from .compat import state_directory
+from .compat import state_directory, audio_identity
 
 
 def configured_music_root(home=None):
@@ -47,7 +47,7 @@ def setup_plan(home, music, executable, data_dir, *, desktop=True):
         f'bind_to_address {_quoted(conf / "socket")}',
         'port "6600"', 'restore_paused "yes"', 'auto_update "yes"',
         'audio_output {', '    type "pulse"', '    name "Ampere"',
-        '    sink "ampere_eq"', '}', '',
+        f'    sink {_quoted(audio_identity(home)[0])}', '}', '',
     ])
     files = {conf / 'mpd.conf': config.encode(),
              state_directory('config', home) / 'library.json':
