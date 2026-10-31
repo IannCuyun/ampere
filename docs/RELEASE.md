@@ -1,7 +1,8 @@
 # Release procedure
 
-**Publication hold:** keep IannCuyun/ampere private until Iann explicitly
-authorizes public visibility. Private releases are permitted. Version 1.0.0
+**Public release authorized October 31, 2026:** Iann requested publishing
+Version 1 so a friend can download it. This supersedes the earlier privacy hold.
+Version 1.0.0
 omits the unfinished Features tab; its code remains for incremental development.
 
 Application license: GPL-3.0-only, selected October 31, 2026. See LICENSE,
