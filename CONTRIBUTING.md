@@ -18,5 +18,5 @@ personal music, artwork caches, credentials or local runtime state in patches.
 Discuss visual changes with the maintainer before implementing a new layout.
 A screenshot of an old design is not approval to restore it.
 
-The project license is pending. External contribution terms will be clarified
-before contributions are solicited.
+Contributions must be compatible with Ampere's GPL-3.0-only license. Preserve
+third-party copyright and license notices.

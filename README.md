@@ -48,8 +48,9 @@ launcher without overwriting existing files or starting services. See
 [installation, service setup and troubleshooting](docs/INSTALL.md) for the
 complete first-run path, existing installations, and upgrades.
 
-The release is still being prepared. The application license remains pending;
-see [third-party dependency notices](THIRD_PARTY_NOTICES.md).
+Ampere is licensed under [GPLv3](LICENSE). See [copyright and warranty
+information](COPYRIGHT) and [third-party dependency notices](THIRD_PARTY_NOTICES.md).
+Source and releases: https://github.com/IannCuyun/ampere .
 
 ## Testing
 

@@ -1,8 +1,7 @@
 # Release procedure
 
-Current state: local release candidate preparation. No public release or tag
-has been created. Application license selection is still pending; see
-THIRD_PARTY_NOTICES.md before distributing the application.
+Application license: GPL-3.0-only, selected October 31, 2026. See LICENSE,
+COPYRIGHT and THIRD_PARTY_NOTICES.md before distributing the application.
 
 1. Run `python tests/run_isolated.py` with the intended Python environment.
 2. Run the QML suite using Qt 6 qmltestrunner with offscreen/software rendering.
@@ -21,9 +20,11 @@ THIRD_PARTY_NOTICES.md before distributing the application.
    and source commit for each uploaded artifact.
 
 The GitHub workflow builds and tests only; it cannot publish packages or create
-releases. GitHub-hosted execution remains unverified until it runs there.
+releases. Hosted checks cover Python 3.12/3.14, QML on the application Qt runtime, and
+fresh Ubuntu 24.04 user services with MPD, PipeWire, EQ routing, MPRIS pause,
+and application/engine shutdown. Physical audio devices remain a separate check.
 
 The October 31 local checks use fresh Python environments and isolated service
-namespaces on the existing host. A real clean-distribution systemd session and
-physical-device listening are separate acceptance checks; do not imply that
-null-output or mocked service lifecycle tests certify them.
+namespaces on the existing host. The hosted Ubuntu check additionally uses real systemd user services.
+Physical-device listening remains separate; a null output does not certify
+audible quality, device switching or suspend/resume across hardware.

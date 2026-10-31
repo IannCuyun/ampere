@@ -4,7 +4,7 @@
   <name>Ampere</name>
   <summary>Your local music library, in motion</summary>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>LicenseRef-proprietary</project_license>
+  <project_license>GPL-3.0-only</project_license>
   <developer id="io.github.ianncuyun">
     <name>Iann Cuyun</name>
   </developer>
@@ -25,7 +25,7 @@
   </categories>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release version="1.0.0" date="2026-08-23">
+    <release version="1.0.0" date="2026-10-31">
       <description>
         <p>
           Ampere 1.0 establishes the Archive Wash album room, Gallery Monolith

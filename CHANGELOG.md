@@ -9,7 +9,7 @@ predates this repo by two very long days).
 
 No changes yet.
 
-## [1.0.0] — 2026-08-23 — the archive opens
+## [1.0.0] — 2026-10-31 — the archive opens
 
 Ampere's first complete release turns the local library into one coherent,
 album-led room while preserving MPD playback, user-owned files, and local-first
@@ -17,8 +17,16 @@ operation.
 
 ### Release highlights
 
+- Added Home recommendations for last month's favorite song and album,
+  returning favorites, recent underplayed releases, and unheard local music.
+- Added safe first-install setup, selected music-folder configuration, desktop
+  launcher installation, read-only diagnostics and documented Linux services.
+- Bundled the interface fonts with their licenses, pinned the tested dependency
+  set, and verified real MPD/PipeWire/EQ/MPRIS startup and shutdown on Ubuntu.
+- Released the application source under GPLv3; bundled fonts retain OFL terms.
+
 - Rebuilt the product around the Iann-selected Archive Wash visual system,
-  Archive Header navigation, art-first Library rooms, Cover Theatre Home,
+  Archive Header navigation, art-first Library rooms, Listening Rows Home,
   Gallery Monolith Now Playing, Stillpoint Ambient, Pocket Horizon compact
   playback, and the 720×480 responsive floor.
 - Replaced the legacy search page with Record Wall: asynchronous,
@@ -42,7 +50,7 @@ operation.
   keyboard feedback stay on the rendered frame. The 50,000-song contract now
   pins index and lookup behavior against the definitions they replaced.
 - Closed the release gate with keyboard and assistive routes, trusted artwork
-  and external-provider boundaries, 1,102 Python tests, 152 Qt 6 QML tests,
+  and external-provider boundaries, 1,233 distributable Python tests, 195 Qt 6 QML tests,
   wheel installation checks, and AppStream/desktop metadata validation.
 
 ### Complete development ledger

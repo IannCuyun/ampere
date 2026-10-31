@@ -1,7 +1,7 @@
 # Third-party dependencies
 
-Ampere's application license is pending a release decision. The current
-`Proprietary` metadata is not a completed distribution clearance.
+Ampere is licensed under GPL-3.0-only. Its own license does not replace the
+licenses of third-party dependencies or bundled assets.
 
 Direct runtime dependencies, from the installed metadata checked October 31, 2026:
 
@@ -22,11 +22,9 @@ This inventory does not replace their license texts or eliminate applicable
 obligations. MPD, PipeWire, ffmpeg and other system executables are installed by
 the operating system and retain their own licenses.
 
-The current direct use of GPL libraries means a permissive-only or proprietary
-release must not be assumed compatible. GPLv3 is the recommended candidate for
-the existing dependency set, subject to completing source/asset provenance and
-redistribution checks. Replacing GPL dependencies would be a separate technical
-project, not a metadata edit.
+The application uses GPLv3 terms alongside its GPL-compatible dependencies.
+The Python wheel contains Ampere source and assets; it does not bundle the
+third-party Python distributions or system executables.
 
 References:
 - https://mutagen.readthedocs.io/en/latest/

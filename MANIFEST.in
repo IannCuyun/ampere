@@ -1,5 +1,6 @@
 include docs/INSTALL.md
 include CHANGELOG.md CONTRIBUTING.md docs/RELEASE.md
+include LICENSE COPYRIGHT
 include README.md pyproject.toml requirements.lock THIRD_PARTY_NOTICES.md
 recursive-include ampere *.py
 recursive-include qml *.qml qmldir *.png *.frag *.qsb
