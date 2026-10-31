@@ -1,5 +1,51 @@
 # Install Ampere on Linux
 
+## One-command installation
+
+Run this from a terminal in your normal graphical desktop account (not as root):
+
+```sh
+curl -fsSL https://github.com/IannCuyun/ampere/releases/download/v1.0.0/install.sh | bash
+```
+
+The installer asks for your existing music folder and your sudo password for
+system packages. Review package-manager prompts. It verifies the v1.0.0 wheel
+and pinned dependency list with embedded SHA256 checksums, installs an isolated
+Python environment, creates the menu launcher, adds missing user units without
+overwriting them, and runs diagnostics. Open **Ampere → Settings → Rescan**
+after installation. It does not launch the player or restart your audio session.
+
+For a custom folder or to inspect the script first:
+
+```sh
+curl -fLO https://github.com/IannCuyun/ampere/releases/download/v1.0.0/install.sh
+bash install.sh --dry-run
+bash install.sh --music-dir "/path/to/music"
+```
+
+Installer targets (x86_64, systemd desktop, running PipeWire audio):
+
+- CachyOS, Arch, EndeavourOS and Manjaro with Python 3.12–3.14.
+- Ubuntu 24.04/26.04, Mint 22.x, Pop!_OS 24.04 and Debian 13.
+
+Distro selection and failure behavior are automated-test covered. The app's
+Ubuntu 24.04 desktop integration and local CachyOS runtime have been checked;
+end-to-end installer runs on every listed distribution are not yet certified.
+Fedora, openSUSE, older Debian/Ubuntu, ARM, non-systemd desktops and PulseAudio-only
+sessions are not supported by this installer. It stops on unsupported systems.
+
+Arch-based installation includes a full system update. Existing custom MPD
+configuration or a running system MPD blocks automatic setup to preserve it.
+On a fresh apt installation only, the newly added system MPD service is disabled
+because Ampere manages a user service instead. PipeWire may require logging out
+and back in after package installation; rerun the command afterward.
+
+Repeated runs check an existing installation without overwriting it. This is a
+Version 1 first-install command, not an automatic upgrade command. If diagnostics
+fail after setup, preserve the output and use the troubleshooting section below.
+
+## Manual installation
+
 Current target: a Linux desktop with systemd user services, PipeWire,
 pipewire-pulse and a session manager such as WirePlumber. Python 3.12 or newer
 is required. Windows and macOS packages are not provided.

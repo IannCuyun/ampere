@@ -30,18 +30,17 @@ correction follows.
 
 ## Install and run
 
-Ampere targets Linux desktops with systemd user services and PipeWire.
-Install Python 3.12+, MPD, mpc, ffmpeg, PipeWire and its PulseAudio tools using
-your distribution's package manager. Then:
+On supported CachyOS/Arch and Ubuntu/Debian-based x86_64 desktops with PipeWire,
+run this in a terminal as your normal user:
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.lock
-.venv/bin/pip install --no-deps .
-.venv/bin/ampere-setup --music-dir "$HOME/Music"
-.venv/bin/ampere-setup --doctor
-.venv/bin/ampere
+curl -fsSL https://github.com/IannCuyun/ampere/releases/download/v1.0.0/install.sh | bash
 ```
+
+The installer asks for your music folder, installs dependencies with your
+package manager, and creates an Ampere application-menu entry. Review sudo and
+package-manager prompts. See the installation guide below for exact supported
+versions, manual installation, and existing MPD configurations.
 
 Use your actual music folder. Setup creates configuration and a desktop
 launcher without overwriting existing files or starting services. See
