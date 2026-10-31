@@ -1,0 +1,11 @@
+[Unit]
+Description=Ampere music engine
+After=pipewire-pulse.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/mpd --no-daemon %h/.config/mpd/mpd.conf
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

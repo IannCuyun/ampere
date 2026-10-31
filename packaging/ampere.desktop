@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Ampere
+GenericName=Music Player
+Comment=Listen to and rediscover your local music library
+Exec=ampere
+Icon=icon-ampere
+Terminal=false
+Categories=AudioVideo;Audio;Player;
+Keywords=music;audio;MPD;player;library;
+StartupWMClass=ampere
+X-GNOME-UsesNotifications=true

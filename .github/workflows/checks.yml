@@ -1,0 +1,41 @@
+name: Application checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python: ['3.12', '3.14']
+    env:
+      QT_QPA_PLATFORM: offscreen
+      QT_QUICK_BACKEND: software
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0 libxkbcommon0 libdbus-1-3 ffmpeg
+      - run: python -m pip install -r requirements.lock
+      - run: python -m pip install --no-deps .
+      - run: python -m pip install build
+      - run: python tests/run_isolated.py
+      - run: python -m pip check
+      - run: python -m build
+      - name: Verify wheel outside checkout
+        run: |
+          python -m venv /tmp/ampere-check
+          /tmp/ampere-check/bin/pip install -c requirements.lock dist/*.whl
+          cd /tmp
+          /tmp/ampere-check/bin/python -c 'from ampere.main import QML_DIR; assert (QML_DIR / "Main.qml").is_file()'
+          /tmp/ampere-check/bin/ampere-setup --help
+  qml:
+    runs-on: ubuntu-24.04
+    env:
+      QT_QPA_PLATFORM: offscreen
+      QT_QUICK_BACKEND: software
+    steps:
+      - uses: actions/checkout@v6
+      - run: sudo apt-get update && sudo apt-get install -y qt6-declarative-dev-tools qml6-module-qttest qml6-module-qtquick qml6-module-qtquick-controls qml6-module-qtquick-layouts qml6-module-qtquick-shapes qml6-module-qtcore qml6-module-qtquick-window qml6-module-qtqml-workerscript qml6-module-qtquick-templates qml6-module-qt-labs-platform
+      - run: /usr/lib/qt6/bin/qmltestrunner -input tests/qml -import qml

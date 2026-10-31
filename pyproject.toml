@@ -1,0 +1,40 @@
+[project]
+name = "ampere-player"
+version = "1.0.0"
+description = "Ampere — local-first music player: MPD engine, QML face, per-device PipeWire parametric EQ"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+authors = [{ name = "Iann Cuyun", email = "iann.cuyun@pm.me" }]
+dependencies = [
+    "PySide6",
+    "python-mpd2",
+    "mutagen",
+    "rapidfuzz",
+    "numpy",
+    "requests",
+    "pykakasi",
+    "pypinyin",
+    "anyascii",
+]
+
+[project.scripts]
+ampere = "ampere.main:main"
+ampere-setup = "ampere.setup:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["ampere*"]
+
+[tool.setuptools.data-files]
+"share/ampere/qml" = ["qml/*.qml", "qml/qmldir"]
+"share/ampere/qml/assets" = ["qml/assets/*.png"]
+"share/ampere/qml/shaders" = ["qml/shaders/*.frag", "qml/shaders/*.qsb"]
+"share/ampere/branding" = ["branding/icon-ampere.png"]
+"share/ampere/systemd" = ["packaging/systemd/*.service"]
+"share/applications" = ["packaging/ampere.desktop"]
+"share/metainfo" = ["packaging/io.github.ianncuyun.ampere.metainfo.xml"]
+"share/icons/hicolor/512x512/apps" = ["branding/icon-ampere.png"]

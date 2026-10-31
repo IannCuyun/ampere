@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.ianncuyun.ampere</id>
+  <name>Ampere</name>
+  <summary>Your local music library, in motion</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary</project_license>
+  <developer id="io.github.ianncuyun">
+    <name>Iann Cuyun</name>
+  </developer>
+  <description>
+    <p>
+      Ampere is a session-first music player for Linux listeners who own their
+      music. It combines an MPD playback engine with fast library browsing,
+      playlists, rediscovery tools, smooth transitions, and per-device sound
+      correction through PipeWire.
+    </p>
+  </description>
+  <launchable type="desktop-id">ampere.desktop</launchable>
+  <provides><binary>ampere</binary></provides>
+  <categories>
+    <category>AudioVideo</category>
+    <category>Audio</category>
+    <category>Player</category>
+  </categories>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.0.0" date="2026-08-23">
+      <description>
+        <p>
+          Ampere 1.0 establishes the Archive Wash album room, Gallery Monolith
+          playback, Unicode-aware Record Wall search, art-first library rooms,
+          durable artist aliases, and a responsive 720 by 480 floor.
+        </p>
+        <p>
+          The release also moves library projections and expensive analysis off
+          the input thread, adds keyboard and assistive routes, and verifies the
+          package against 1,102 Python tests and 152 QML interaction tests.
+        </p>
+      </description>
+    </release>
+    <release version="0.23.0" date="2026-07-24"/>
+  </releases>
+</component>
