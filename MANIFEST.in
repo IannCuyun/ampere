@@ -5,7 +5,7 @@ recursive-include ampere *.py
 recursive-include qml *.qml qmldir *.png *.frag *.qsb
 include branding/icon-ampere.png
 recursive-include packaging *.desktop *.xml *.service
-recursive-include tests *.py *.qml *.json
+recursive-include tests *.py *.qml *.json *.sh
 prune design
 prune debug
 prune profiles
