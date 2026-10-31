@@ -20,6 +20,10 @@ for attempt in {1..60}; do
   sleep 0.5
 done
 pactl load-module module-null-sink sink_name=ampere-test-output
+for attempt in {1..60}; do
+  if pactl set-default-sink ampere-test-output 2>/dev/null; then break; fi
+  sleep 0.5
+done
 pactl set-default-sink ampere-test-output
 python - <<'PY'
 import math, os, struct, wave

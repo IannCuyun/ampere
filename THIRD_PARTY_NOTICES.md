@@ -32,3 +32,13 @@ References:
 - https://mutagen.readthedocs.io/en/latest/
 - https://github.com/miurahr/pykakasi/blob/master/COPYING
 - https://www.qt.io/development/open-source-lgpl-obligations
+
+## Bundled fonts
+
+Inter (The Inter Project Authors) and Rajdhani (Indian Type Foundry) are
+redistributed unmodified under the SIL Open Font License 1.1. Their complete
+copyright and license texts are included beside the font files in
+`qml/assets/fonts/Inter-OFL.txt` and `Rajdhani-OFL.txt` and in installed assets.
+Upstream source: https://github.com/google/fonts/tree/main/ofl/inter and
+https://github.com/google/fonts/tree/main/ofl/rajdhani . They keep their own
+font licenses independently of Ampere's application license.

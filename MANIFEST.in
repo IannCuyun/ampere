@@ -3,6 +3,7 @@ include CHANGELOG.md CONTRIBUTING.md docs/RELEASE.md
 include README.md pyproject.toml requirements.lock THIRD_PARTY_NOTICES.md
 recursive-include ampere *.py
 recursive-include qml *.qml qmldir *.png *.frag *.qsb
+recursive-include qml/assets/fonts *.ttf *-OFL.txt
 include branding/icon-ampere.png
 recursive-include packaging *.desktop *.xml *.service
 recursive-include tests *.py *.qml *.json *.sh

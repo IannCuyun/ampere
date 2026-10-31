@@ -14,6 +14,14 @@ Item {
     id: t
     visible: false
 
+    // Ship the approved typefaces so a fresh desktop uses the same metrics.
+    FontLoader { id: interTypeface; source: "assets/fonts/Inter.ttf" }
+    FontLoader { id: rajdhaniTypeface; source: "assets/fonts/Rajdhani-Regular.ttf" }
+    FontLoader { source: "assets/fonts/Rajdhani-Light.ttf" }
+    FontLoader { source: "assets/fonts/Rajdhani-Medium.ttf" }
+    FontLoader { source: "assets/fonts/Rajdhani-SemiBold.ttf" }
+    FontLoader { source: "assets/fonts/Rajdhani-Bold.ttf" }
+
     // Utility rooms stay calm; playback rooms may use the full album palette.
     // Main.qml owns this state so color supports the current job instead of
     // tinting every organizational surface at maximum intensity.
@@ -185,8 +193,8 @@ Item {
     // for gradient mixes that would otherwise snap on song change
     readonly property color artVividEased: Qt.hsla(hue(), _sFull, _l, 1)
 
-    readonly property string font: "Inter"
-    readonly property string displayFont: "Rajdhani"
+    readonly property string font: interTypeface.name || "Inter"
+    readonly property string displayFont: rajdhaniTypeface.name || "Rajdhani"
 
     // ---- Archive Wash ink set (locked visual system — design/SPEC.md) ----
     // Warm-neutral inks that sit on the washed album room (L.01 mockup hexes).
