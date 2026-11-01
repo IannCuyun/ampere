@@ -39,11 +39,9 @@ install_packages() {
     ((${#missing[@]})) || return 0
     command -v sudo >/dev/null || fail 'sudo is required to install missing system dependencies.'
     if [[ "$manager" == pacman ]]; then
-        # Never refresh databases alone (partial upgrade) or upgrade the desktop.
-        local updates
-        updates=$(pacman -Qu) || [[ $? == 1 ]] || fail 'Cannot inspect pending system updates.'
-        [[ -z "$updates" ]] || fail 'System updates are pending. Complete your normal system update separately, then rerun Ampere installation.'
-        sudo pacman -S --needed "${missing[@]}" || fail 'Package installation failed. If repository data is stale, complete your normal system update separately and retry.'
+        # Use the existing repository database. Do not refresh it alone or
+        # inspect/upgrade unrelated installed applications.
+        sudo pacman -S --needed "${missing[@]}" || fail 'Could not install the required packages. See the package-manager error above; Ampere will not change system-update settings or force installation.'
     else
         sudo apt-get update
         sudo apt-get install --no-install-recommends --no-upgrade "${missing[@]}"

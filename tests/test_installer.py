@@ -47,16 +47,25 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout, '')
 
-    def test_pending_arch_updates_stop_before_installation(self):
+    def test_unrelated_updates_do_not_block_installation(self):
         result = self.shell("""
             manager=pacman; missing=(mpd)
-            pacman() { echo 'firefox old -> new'; }
-            sudo() { echo UNEXPECTED; }
+            pacman() { echo 'UNEXPECTED UPDATE QUERY'; return 99; }
+            sudo() { printf '%s\\n' "$*"; }
+            install_packages
+        """)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), 'pacman -S --needed mpd')
+
+    def test_package_failure_is_reported_without_forcing_or_upgrading(self):
+        result = self.shell("""
+            manager=pacman; missing=(mpd)
+            sudo() { printf '%s\\n' "$*"; return 1; }
             install_packages
         """)
         self.assertNotEqual(result.returncode, 0)
-        self.assertNotIn('UNEXPECTED', result.stdout)
-        self.assertIn('normal system update separately', result.stderr)
+        self.assertEqual(result.stdout.strip(), 'pacman -S --needed mpd')
+        self.assertIn('Could not install the required packages', result.stderr)
 
     def test_apt_requests_missing_only_without_recommendations(self):
         result = self.shell("""

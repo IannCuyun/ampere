@@ -35,8 +35,10 @@ Fedora, openSUSE, older Debian/Ubuntu, ARM, non-systemd desktops and PulseAudio-
 sessions are not supported by this installer. It stops on unsupported systems.
 
 Only missing packages are requested. No full system update is performed. On Arch,
-pending updates or stale repository data require your normal system update
-separately; Ampere never refreshes Arch databases alone. Apt recommendations are
+the installer uses the existing package database and does not check for unrelated
+updates or require a system upgrade. It never refreshes Arch databases alone.
+If the package manager cannot resolve or download a required package, installation
+stops with its error; dependency checks are never bypassed. Apt recommendations are
 disabled. An existing PipeWire desktop is required; the installer does not replace
 your audio server or session manager. Existing custom MPD
 configuration or a running system MPD blocks automatic setup to preserve it.
