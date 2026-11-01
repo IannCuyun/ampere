@@ -23,7 +23,51 @@ class InstallerTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(manager, result.stdout)
                 self.assertIn('mpd', result.stdout)
-                self.assertIn('wireplumber', result.stdout)
+                self.assertNotIn('wireplumber', result.stdout)
+                self.assertNotIn('firefox', result.stdout)
+                self.assertNotIn('python-pip', result.stdout)
+
+    def test_only_missing_arch_packages_are_requested(self):
+        result = self.shell("""
+            manager=pacman; packages=(python mpd ffmpeg)
+            pacman() { if [[ $1 == -Q ]]; then [[ $2 != mpd ]]; else return 1; fi; }
+            sudo() { printf '%s\\n' "$*"; }
+            missing_packages; install_packages
+        """)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), 'pacman -S --needed mpd')
+
+    def test_satisfied_dependencies_do_not_invoke_sudo(self):
+        result = self.shell("""
+            manager=pacman; packages=(python mpd)
+            pacman() { return 0; }
+            sudo() { echo UNEXPECTED; return 99; }
+            missing_packages; install_packages
+        """)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, '')
+
+    def test_pending_arch_updates_stop_before_installation(self):
+        result = self.shell("""
+            manager=pacman; missing=(mpd)
+            pacman() { echo 'firefox old -> new'; }
+            sudo() { echo UNEXPECTED; }
+            install_packages
+        """)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn('UNEXPECTED', result.stdout)
+        self.assertIn('normal system update separately', result.stderr)
+
+    def test_apt_requests_missing_only_without_recommendations(self):
+        result = self.shell("""
+            manager=apt-get; packages=(python3 mpd ffmpeg)
+            dpkg-query() { [[ $3 != mpd ]] || return 1; printf 'install ok installed'; }
+            sudo() { printf '%s\\n' "$*"; }
+            missing_packages; install_packages
+        """)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.splitlines(), [
+            'apt-get update', 'apt-get install --no-install-recommends --no-upgrade mpd'])
 
     def test_old_or_unknown_distributions_stop(self):
         for distro, version in [('ubuntu','22.04'),('debian','12'),('fedora','44')]:

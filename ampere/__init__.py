@@ -16,4 +16,4 @@ for _v in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS",
            "NUMEXPR_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"):
     _os.environ.setdefault(_v, "1")
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"

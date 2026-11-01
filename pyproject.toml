@@ -1,6 +1,6 @@
 [project]
 name = "ampere-player"
-version = "1.0.0"
+version = "1.0.1"
 description = "Ampere — local-first music player: MPD engine, QML face, per-device PipeWire parametric EQ"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -8,7 +8,7 @@ license = "GPL-3.0-only"
 license-files = ["LICENSE", "COPYRIGHT", "THIRD_PARTY_NOTICES.md"]
 authors = [{ name = "Iann Cuyun" }]
 dependencies = [
-    "PySide6",
+    "PySide6-Essentials>=6.8,<7",
     "python-mpd2",
     "mutagen",
     "rapidfuzz",

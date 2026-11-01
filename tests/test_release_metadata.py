@@ -19,7 +19,7 @@ class ReleaseMetadataTests(unittest.TestCase):
 
     def test_every_public_version_agrees(self):
         version = self.project["project"]["version"]
-        self.assertEqual("1.0.0", version)
+        self.assertEqual("1.0.1", version)
         self.assertEqual(version, ampere.__version__)
         self.assertEqual(
             version,

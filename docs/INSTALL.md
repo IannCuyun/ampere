@@ -5,11 +5,11 @@
 Run this from a terminal in your normal graphical desktop account (not as root):
 
 ```sh
-curl -fsSL https://github.com/IannCuyun/ampere/releases/download/v1.0.0/install.sh | bash
+curl -fsSL https://github.com/IannCuyun/ampere/releases/download/v1.0.1/install.sh | bash
 ```
 
 The installer asks for your existing music folder and your sudo password for
-system packages. Review package-manager prompts. It verifies the v1.0.0 wheel
+system packages. Review package-manager prompts. It verifies the v1.0.1 wheel
 and pinned dependency list with embedded SHA256 checksums, installs an isolated
 Python environment, creates the menu launcher, adds missing user units without
 overwriting them, and runs diagnostics. Open **Ampere → Settings → Rescan**
@@ -18,7 +18,7 @@ after installation. It does not launch the player or restart your audio session.
 For a custom folder or to inspect the script first:
 
 ```sh
-curl -fLO https://github.com/IannCuyun/ampere/releases/download/v1.0.0/install.sh
+curl -fLO https://github.com/IannCuyun/ampere/releases/download/v1.0.1/install.sh
 bash install.sh --dry-run
 bash install.sh --music-dir "/path/to/music"
 ```
@@ -34,11 +34,14 @@ end-to-end installer runs on every listed distribution are not yet certified.
 Fedora, openSUSE, older Debian/Ubuntu, ARM, non-systemd desktops and PulseAudio-only
 sessions are not supported by this installer. It stops on unsupported systems.
 
-Arch-based installation includes a full system update. Existing custom MPD
+Only missing packages are requested. No full system update is performed. On Arch,
+pending updates or stale repository data require your normal system update
+separately; Ampere never refreshes Arch databases alone. Apt recommendations are
+disabled. An existing PipeWire desktop is required; the installer does not replace
+your audio server or session manager. Existing custom MPD
 configuration or a running system MPD blocks automatic setup to preserve it.
 On a fresh apt installation only, the newly added system MPD service is disabled
-because Ampere manages a user service instead. PipeWire may require logging out
-and back in after package installation; rerun the command afterward.
+because Ampere manages a user service instead. 
 
 Repeated runs check an existing installation without overwriting it. This is a
 Version 1 first-install command, not an automatic upgrade command. If diagnostics

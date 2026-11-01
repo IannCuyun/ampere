@@ -34,7 +34,7 @@ On supported CachyOS/Arch and Ubuntu/Debian-based x86_64 desktops with PipeWire,
 run this in a terminal as your normal user:
 
 ```bash
-curl -fsSL https://github.com/IannCuyun/ampere/releases/download/v1.0.0/install.sh | bash
+curl -fsSL https://github.com/IannCuyun/ampere/releases/download/v1.0.1/install.sh | bash
 ```
 
 The installer asks for your music folder, installs dependencies with your

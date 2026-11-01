@@ -9,6 +9,13 @@ predates this repo by two very long days).
 
 No changes yet.
 
+## [1.0.1] — 2026-10-31 — smaller installation
+
+- Use Qt Essentials; omit unused Qt Addons, WebEngine and PDF components.
+- Install only missing system packages; do not run a full system upgrade.
+- Disable apt recommendations and avoid upgrading existing target packages.
+- Require an existing PipeWire desktop instead of replacing the audio stack.
+
 ## [1.0.0] — 2026-10-31 — the archive opens
 
 Ampere's first complete release turns the local library into one coherent,

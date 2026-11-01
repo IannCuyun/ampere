@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Ampere v1.0.0 installer. Run as your desktop user, never with sudo bash.
+# Ampere v1.0.1 installer. Run as your desktop user, never with sudo bash.
 set -euo pipefail
 
 fail() { printf 'Ampere: %s\n' "$*" >&2; exit 1; }
@@ -8,7 +8,7 @@ select_packages() {
     case "$1" in
         arch|cachyos|endeavouros|manjaro)
             manager=pacman
-            packages=(python python-pip mpd mpc ffmpeg pipewire pipewire-audio pipewire-pulse wireplumber libpulse curl)
+            packages=(python mpd mpc ffmpeg pipewire libpulse curl)
             ;;
         ubuntu|linuxmint|pop|debian)
             case "$1:$2" in
@@ -16,10 +16,38 @@ select_packages() {
                 *) fail "This release supports Ubuntu 24.04/26.04, Mint 22, Pop!_OS 24.04, Debian 13, and Arch-based desktops. Detected $1 $2." ;;
             esac
             manager=apt-get
-            packages=(python3 python3-venv python3-pip mpd mpc ffmpeg pipewire pipewire-bin pipewire-pulse wireplumber pulseaudio-utils dbus-user-session libegl1 libopengl0 libxcb-cursor0 curl)
+            packages=(python3 python3-venv mpd mpc ffmpeg pipewire-bin pulseaudio-utils libegl1 libopengl0 libxcb-cursor0 curl)
             ;;
         *) fail "Unsupported distribution: $1. No changes made. See docs/INSTALL.md for manual setup." ;;
     esac
+}
+
+missing_packages() {
+    missing=()
+    local package status
+    for package in "${packages[@]}"; do
+        if [[ "$manager" == pacman ]]; then
+            pacman -Q "$package" >/dev/null 2>&1 || missing+=("$package")
+        else
+            status=$(dpkg-query -W -f='${Status}' "$package" 2>/dev/null) || status=''
+            [[ "$status" == 'install ok installed' ]] || missing+=("$package")
+        fi
+    done
+}
+
+install_packages() {
+    ((${#missing[@]})) || return 0
+    command -v sudo >/dev/null || fail 'sudo is required to install missing system dependencies.'
+    if [[ "$manager" == pacman ]]; then
+        # Never refresh databases alone (partial upgrade) or upgrade the desktop.
+        local updates
+        updates=$(pacman -Qu) || [[ $? == 1 ]] || fail 'Cannot inspect pending system updates.'
+        [[ -z "$updates" ]] || fail 'System updates are pending. Complete your normal system update separately, then rerun Ampere installation.'
+        sudo pacman -S --needed "${missing[@]}" || fail 'Package installation failed. If repository data is stale, complete your normal system update separately and retry.'
+    else
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends --no-upgrade "${missing[@]}"
+    fi
 }
 
 install_main() {
@@ -31,7 +59,7 @@ install_main() {
             --dry-run) plan=1; shift ;;
             --help)
                 printf '%s\n' 'Usage: install.sh [--music-dir PATH] [--skip-system] [--dry-run]' \
-                    'Installs Ampere v1.0.0 for your desktop account. Prompts for a music folder.' \
+                    'Installs Ampere v1.0.1 for your desktop account. Prompts for a music folder.' \
                     '--skip-system: dependencies already installed; no sudo/package operations.' \
                     '--dry-run: show package plan without changing anything.'
                 return ;;
@@ -44,10 +72,11 @@ install_main() {
     local ID='' VERSION_ID=''
     . /etc/os-release
     local manager
-    local -a packages
+    local -a packages missing
     select_packages "$ID" "$VERSION_ID"
-    printf 'Ampere v1.0.0 — %s %s\n' "$ID" "$VERSION_ID"
-    printf 'System packages (%s): %s\n' "$manager" "${packages[*]}"
+    printf 'Ampere v1.0.1 — %s %s\n' "$ID" "$VERSION_ID"
+    missing_packages
+    printf 'System packages missing (%s): %s\n' "$manager" "${missing[*]:-none}"
     printf 'Application: %s/.local/share/ampere/venv\n' "$HOME"
     if ((plan)); then return; fi
     ((EUID != 0)) || fail 'Run as your normal desktop account. Only package installation uses sudo.'
@@ -80,13 +109,14 @@ install_main() {
     local had_mpd=0
     command -v mpd >/dev/null && had_mpd=1
     if ((!skip_system)); then
-        command -v sudo >/dev/null || fail 'sudo is required to install system dependencies.'
-        printf 'Review the package-manager prompts. Arch-based installation includes a full system update.\n'
-        if [[ "$manager" == pacman ]]; then
-            sudo pacman -Syu --needed "${packages[@]}" < /dev/tty
-        else
-            sudo apt-get update
-            sudo apt-get install "${packages[@]}" < /dev/tty
+        # A working audio session is a desktop prerequisite, not permission
+        # to install or replace the user's sound server/session manager.
+        local audio_unit
+        for audio_unit in pipewire.service pipewire-pulse.service; do
+            systemctl --user is-active --quiet "$audio_unit" || fail 'A running PipeWire + pipewire-pulse desktop is required. No audio stack will be installed or replaced.'
+        done
+        if ((${#missing[@]})); then install_packages < /dev/tty; fi
+        if [[ "$manager" == apt-get ]]; then
             # Debian packages can auto-start a system MPD on the port reserved
             # for the desktop player. Never stop a pre-existing installation.
             if ((had_mpd == 0)); then
@@ -102,22 +132,22 @@ install_main() {
     fi
     python3 -c 'import sys; assert (3,12) <= sys.version_info[:2] <= (3,14), "Python 3.12–3.14 required"' || fail 'Unsupported Python runtime.'
     # Do not replace a working PulseAudio desktop or restart live audio.
-    pactl info | grep -qi pipewire || fail 'A running PipeWire audio session is required. Log out/in after installing PipeWire, then rerun.'
+    pactl info | grep -qi pipewire || fail 'A running PipeWire audio session is required. Configure your desktop audio separately, then rerun.'
     local temp_dir
     temp_dir=$(mktemp -d)
     local setup_done=0 env_created=0
     trap 'rm -rf -- "$temp_dir"; if ((env_created && !setup_done)); then rm -rf -- "$destination"; fi' EXIT
-    local wheel=ampere_player-1.0.0-py3-none-any.whl
+    local wheel=ampere_player-1.0.1-py3-none-any.whl
     curl --fail --location --proto '=https' --tlsv1.2 --retry 3 \
-        "https://github.com/IannCuyun/ampere/releases/download/v1.0.0/$wheel" -o "$temp_dir/$wheel"
-    printf '%s  %s\n' b7ee2838c19a179acca34cff570653a7c6ae9a0f36125033cb1ad877a71dab64 "$temp_dir/$wheel" | sha256sum --check -
+        "https://github.com/IannCuyun/ampere/releases/download/v1.0.1/$wheel" -o "$temp_dir/$wheel"
+    printf '%s  %s\n' 1e16c2c5f21dc719a5830541bc67b2d2504be75c083b66d01e5ca98b1a3de700 "$temp_dir/$wheel" | sha256sum --check -
     mkdir -p "$(dirname "$destination")"
     # Keep the environment at its final path: Python entrypoints embed it.
     env_created=1
     python3 -m venv "$destination"
     curl --fail --location --proto '=https' --tlsv1.2 --retry 3 \
-        'https://raw.githubusercontent.com/IannCuyun/ampere/7d4437a6b3e11a3ba264790029891cffd8d06e2a/requirements.lock' -o "$temp_dir/requirements.lock"
-    printf '%s  %s\n' a0fb2123cce39ca990e356514cdfd36d9a5e4d49dd66e3270c99434792f3edae "$temp_dir/requirements.lock" | sha256sum --check -
+        'https://github.com/IannCuyun/ampere/releases/download/v1.0.1/requirements.lock' -o "$temp_dir/requirements.lock"
+    printf '%s  %s\n' 61520338e865a2e4be5b0bce268a65408f558cece25a48ba16e340f4d1111287 "$temp_dir/requirements.lock" | sha256sum --check -
     "$destination/bin/pip" install -c "$temp_dir/requirements.lock" "$temp_dir/$wheel"
     "$destination/bin/ampere-setup" --music-dir "$music" --dry-run
     "$destination/bin/ampere-setup" --music-dir "$music"
