@@ -41,7 +41,7 @@ disabled. An existing PipeWire desktop is required; the installer does not repla
 your audio server or session manager. Existing custom MPD
 configuration or a running system MPD blocks automatic setup to preserve it.
 On a fresh apt installation only, the newly added system MPD service is disabled
-because Ampere manages a user service instead. 
+because Ampere manages a user service instead.
 
 Repeated runs check an existing installation without overwriting it. This is a
 Version 1 first-install command, not an automatic upgrade command. If diagnostics
